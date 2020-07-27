@@ -1,5 +1,4 @@
 // C'est de la merde ça marche pas ! et j'ai aucune idée pour l'améliorer ! 
-// Pour tirer fléche du haut
 // Exo trop dur pour mon cerveau limité, je ne vois absolument pas quoi faire
 
 let canvas = document.getElementById("playZone");
@@ -20,12 +19,8 @@ let spacePressed = false;
 let randomX = Math.random()*450;
 let randomY = Math.random()*400;
 let touch = false;
-let arrayEnnemies = [];
-
-
 
 document.getElementById('start').addEventListener('click',function start(){
-  // let ennemie1= new lol(randomX,randomY,"green",55,55);
 function drawRect() {
 ctx.beginPath();
  ctx.rect(x, y, 50, 50);
@@ -55,7 +50,7 @@ else if(leftPressed) {
 function missile(){
 let mx =x;
 ctx.beginPath();
-ctx.rect(mx,my, 50, 50);
+ctx.rect(mx,my, 20, 20);
  ctx.fillStyle = "blue";
  ctx.fill();
  ctx.closePath();
@@ -66,15 +61,6 @@ function drawMissile() {
      missile();
       my += dy;
   }
-
-// function lol(width, height, color, x, y) {
-//    this.width = width;
-//      this.height = height;
-//      this.x = x;
-//     this.y = y;
-//     ctx.fillStyle = color;
-//     ctx.fillRect(this.x, this.y, this.width, this.height);
-//  }
  function ennemies(){
  ctx.beginPath();
   ctx.rect(randomX, randomY, 55, 55);
@@ -83,16 +69,16 @@ function drawMissile() {
   ctx.closePath();
  }
  function drawEnnemies(){
-//  ctx.clearRect(0,randomY, canvas.width,canvas.height);
+  // ctx.clearRect(0,randomY, canvas.width,canvas.height);
    ennemies();
-   randomX += xx;
+    randomX += xx;
    if(randomX + xx > (canvas.width-50) || randomX+ xx < 0) {
-     xx = -xx;
+    xx = -xx;
  }
  }
   let myVar =setInterval(drawEnnemies,5);
 
-setInterval(draw,20);
+setInterval(draw,30);
 
  function keyDownHandler(e) {
   if(e.key == "Right" || e.key == "ArrowRight") {
@@ -114,16 +100,14 @@ function keyUpHandler(e) {
 function spaceShoot(e){
   if(e.keyCode == 32) {
     spacePressed = true;
-    console.log(spacePressed);
     if (my<0){
       my = 400;
     }
-    if (spacePressed ===true) {
-    drawMissile();
-    var interval = setInterval(drawMissile,10);
-    }
+     if (spacePressed ===true) {
+    // var interval = setInterval(drawMissile,10);
+    return interval;
+     }
 }
-
 }
 function spaceNot(e){
   if(e.keyCode == 32 ) {
@@ -134,20 +118,27 @@ function collide (){
 if (x < randomX+ 55 &&
   x + 55 > randomX &&
   my < randomY + 55 &&
-  50 + my > randomY) {
+  20 + my > randomY) {
    // collision détectée !
-    touch = true;
+ randomY = Math.random()*400;
+ randomX = Math.random()*450;
+ touch = true;
     console.log("touche");
-    score.innerHTML= s+1;
+    score.innerHTML= s;
     if (touch===true){
     clearTimeout(myVar);
-    setTimeout(myVar,50);
+     setTimeout(myVar,100);
+    touch = false;
+    s++;
     }
 }
+// setTimeout(myVar,50);
 }
 setInterval(collide,10);
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("keydown", spaceShoot, false);
 document.addEventListener("keyup", spaceNot, false);
+let interval = setInterval(drawMissile,15);
+
 });
