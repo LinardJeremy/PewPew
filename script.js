@@ -4,6 +4,8 @@
 
 let canvas = document.getElementById("playZone");
 let score = document.getElementById('score');
+let s =0;
+score.innerHTML=0;
 let ctx = canvas.getContext("2d");
 let x = 50;
 let y = 450;
@@ -136,7 +138,11 @@ if (x < randomX+ 55 &&
    // collision détectée !
     touch = true;
     console.log("touche");
-    score.innerHTML= +1;
+    score.innerHTML= s+1;
+    if (touch===true){
+    clearTimeout(myVar);
+    setTimeout(myVar,50);
+    }
 }
 }
 setInterval(collide,10);
