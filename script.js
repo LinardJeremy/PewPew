@@ -3,29 +3,67 @@
 
 let canvas = document.getElementById("playZone");
 let score = document.getElementById('score');
-let s =0;
-score.innerHTML=0;
+let s =1;
+// score.innerHTML=0;
 let ctx = canvas.getContext("2d");
 let x = 50;
 let y = 450;
 let my= 400;
 let mx;
 let dx = 4;
- let dy = -2;
+ let dy = -3;
  let xx =2;
 let rightPressed = false;
 let leftPressed = false;
 let spacePressed = false;
 let randomX = Math.random()*450;
-let randomY = Math.random()*400;
+let randomY = Math.random()*350;
 let touch = false;
-let interval = setInterval(drawMissile,15);
-
-// document.getElementById('start').addEventListener('click',start());
+document.getElementById("restart").disabled = true;
 
 
-ennemies();
-setInterval(ennemies, 10);
+document.getElementById("start").addEventListener('click', function(){
+let interval = setInterval(draw,15);
+document.getElementById("start").disabled = true;
+  
+   function endGame(){
+    if (s==11){
+       clearInterval(interval);
+       ctx.clearRect(0,0,canvas.width,canvas.height);
+       ctx.fillStyle= 'blue';
+       ctx.font = 'bold 50px serif';
+       ctx.fillText('Partie finie, GG',50,250);
+document.getElementById("restart").disabled = false;
+       
+
+     }
+   }
+    setInterval(endGame,15);
+
+})
+document.getElementById("restart").addEventListener('click', function(){
+  document.getElementById("restart").disabled = true;
+  document.getElementById("start").disabled = true;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  let interval =setInterval(draw,15);
+  score.innerHTML = 0;
+  s=1;
+  function endGame(){
+    if (s==11){
+      clearInterval(interval);
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle= 'blue';
+      ctx.font = 'bold 50px serif';
+      ctx.fillText('Partie finie, GG',50,250);
+      document.getElementById("restart").disabled = false;
+
+
+    }
+  }
+  setInterval(endGame,15);
+
+});
+
 function drawRect() {
 ctx.beginPath();
  ctx.rect(x, y, 50, 50);
@@ -33,9 +71,32 @@ ctx.beginPath();
  ctx.fill();
  ctx.closePath();
 }
-function draw() {
+function missile(){
+let mx =x;
+ctx.beginPath();
+ctx.rect(mx,my, 20, 20);
+ ctx.fillStyle = "blue";
+ ctx.fill();
+ ctx.closePath();
+
+}
+ function ennemies(){
+ ctx.beginPath();
+ ctx.rect(randomX, randomY, 30, 30);
+  ctx.fillStyle = "green";
+  ctx.fill();
+  ctx.closePath();
+ }
+ function draw() {
   ctx.clearRect(0,0,canvas.width,canvas.height);
   drawRect();
+  missile();
+  ennemies();
+  my += dy;
+  randomX += xx;
+      if(randomX + xx > (canvas.width-50) || randomX+ xx < 0) {
+      xx = -xx;
+    }
   if(rightPressed) {
      x += dx;
     
@@ -51,40 +112,7 @@ else if(leftPressed) {
   }  
   }
 }
-
-function missile(){
-let mx =x;
-ctx.beginPath();
-ctx.rect(mx,my, 20, 20);
- ctx.fillStyle = "blue";
- ctx.fill();
- ctx.closePath();
-
-}
-function drawMissile() {
-    ctx.clearRect(mx,(my+dy),50,50);
-     missile();
-      my += dy;
-  }
- function ennemies(){
- ctx.beginPath();
- ctx.rect(randomX, randomY, 55, 55);
-  ctx.fillStyle = "green";
-  ctx.fill();
-  ctx.closePath();
- }
-//  function drawEnnemies(){
-//   // ctx.clearRect(0,randomY, canvas.width,canvas.height);
-//    ennemies();
-//     randomX += xx;
-//    if(randomX + xx > (canvas.width-50) || randomX+ xx < 0) {
-//     xx = -xx;
-//  }
-//  }
-  // let myVar =setInterval(drawEnnemies,5);
-
-setInterval(draw,30);
-
+// let interval = setInterval(draw,15);
  function keyDownHandler(e) {
   if(e.key == "Right" || e.key == "ArrowRight") {
       rightPressed = true;
@@ -109,8 +137,7 @@ function spaceShoot(e){
       my = 400;
     }
      if (spacePressed ===true) {
-    // var interval = setInterval(drawMissile,10);
-    return interval;
+    // return draw();
      }
 }
 }
@@ -120,9 +147,9 @@ function spaceNot(e){
 }
 }
 function collide (){
-if (x < randomX+ 55 &&
-  x + 55 > randomX &&
-  my < randomY + 55 &&
+if (x < randomX+ 30 &&
+  x + 30 > randomX &&
+  my < randomY + 30 &&
   20 + my > randomY) {
    // collision détectée !
  randomY = Math.random()*400;
@@ -131,15 +158,13 @@ if (x < randomX+ 55 &&
     console.log("touche");
     score.innerHTML= s;
     if (touch===true){
-    // clearTimeout(myVar);
-    //  setTimeout(myVar,100);
     touch = false;
     s++;
     }
 }
-// setTimeout(myVar,50);
 }
-setInterval(collide,10);
+
+setInterval(collide,30);
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
 document.addEventListener("keydown", spaceShoot, false);

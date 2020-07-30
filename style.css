@@ -10,3 +10,6 @@ body {
     border:1px dashed #ccc;
     background:#000;
   }
+  button {
+    font-size: large;
+  }
