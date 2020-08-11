@@ -1,6 +1,3 @@
-// C'est de la merde ça marche pas ! et j'ai aucune idée pour l'améliorer ! 
-// Exo trop dur pour mon cerveau limité, je ne vois absolument pas quoi faire
-
 let canvas = document.getElementById("playZone");
 let score = document.getElementById('score');
 let s =1;
@@ -8,17 +5,16 @@ let s =1;
 let ctx = canvas.getContext("2d");
 let x = 50;
 let y = 450;
-let my= 400;
+let my;
 let mx;
 let dx = 4;
- let dy = -3;
+ let dy = 0;
  let xx =2;
 let rightPressed = false;
 let leftPressed = false;
 let spacePressed = false;
 let randomX = Math.random()*450;
 let randomY = Math.random()*350;
-let touch = false;
 document.getElementById("restart").disabled = true;
 
 
@@ -71,10 +67,11 @@ ctx.beginPath();
  ctx.fill();
  ctx.closePath();
 }
+ mx =x;
 function missile(){
-let mx =x;
+// let mx =x;
 ctx.beginPath();
-ctx.rect(mx,my, 20, 20);
+ctx.rect(x,my, 20, 20);
  ctx.fillStyle = "blue";
  ctx.fill();
  ctx.closePath();
@@ -92,7 +89,7 @@ ctx.rect(mx,my, 20, 20);
   drawRect();
   missile();
   ennemies();
-  my += dy;
+ my += dy;
   randomX += xx;
       if(randomX + xx > (canvas.width-50) || randomX+ xx < 0) {
       xx = -xx;
@@ -111,6 +108,9 @@ else if(leftPressed) {
       x = 0;
   }  
   }
+}
+function addMy() {
+  my += dy;
 }
 // let interval = setInterval(draw,15);
  function keyDownHandler(e) {
@@ -132,9 +132,12 @@ function keyUpHandler(e) {
 }
 function spaceShoot(e){
   if(e.keyCode == 32) {
+    my = 450;
+    dy = -3;
     spacePressed = true;
     if (my<0){
-      my = 400;
+      my;
+      dy=0;
     }
      if (spacePressed ===true) {
     // return draw();
@@ -154,13 +157,11 @@ if (x < randomX+ 30 &&
    // collision détectée !
  randomY = Math.random()*400;
  randomX = Math.random()*450;
- touch = true;
-    console.log("touche");
     score.innerHTML= s;
-    if (touch===true){
-    touch = false;
     s++;
-    }
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+    my =500;
+    dy=0;
 }
 }
 
